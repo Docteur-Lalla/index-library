@@ -75,6 +75,32 @@ std::string Option::get(const std::string& option)
 	return opts[option];
 }
 
+// Returns the common option table of each index program.
+std::map<std::string, bool> classic_option_table()
+{
+	std::map<std::string, bool> table;
+
+	table["--tags"] = true;
+	table["-t"] = true;
+
+	table["--title"] = true;
+	table["-T"] = true;
+
+	table["--by"] = true;
+	table["-b"] = true;
+
+	table["--help"] = false;
+	table["-h"] = false;
+
+	table["--version"] = false;
+	table["-V"] = false;
+
+	table["--verbose"] = false;
+	table["-v"] = false;
+
+	return table;
+}
+
 std::vector<std::string> vector_of_array(int argc, char *argv[])
 {
 	std::vector<std::string> vec;

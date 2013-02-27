@@ -46,6 +46,7 @@ class Option
 		std::vector<std::string> code;
 };
 
+std::map<std::string, bool> classic_option_table();
 std::vector<std::string> vector_of_array(int argc, char *argv[]);
 
 #endif
