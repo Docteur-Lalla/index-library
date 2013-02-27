@@ -29,8 +29,9 @@
 
 #include <sstream>
 #include <iomanip>
-
 #include <fstream>
+
+#include <dirent.h>
 
 // Creates the entry ID of string type and format it with the following :
 //   - 8 hexadecimals digits
@@ -61,5 +62,24 @@ void add_entry_in_tag(const index_entry& entry, const std::string& tag)
 	file << entry_name_of_uint(entry.id);
 	file << " \"" << entry.title << "\" \"" << entry.filetype << "\" \"" << entry.author << "\" ";
 	file << entry.date;
+}
+
+// Computes the count of entries in the entries directory.
+unsigned int entry_count(const index_local& local)
+{
+	DIR* dir = opendir(local.entries.c_str());
+	dirent* ent;
+
+	if(!dir)
+		throw std::string("unfound directory " + local.entries + ".");
+	
+	unsigned int count = 0;
+
+	while(ent = readdir(dir))
+	{
+		count++;
+	}
+
+	return count - 2; // The '.' and '..' are not files !
 }
 

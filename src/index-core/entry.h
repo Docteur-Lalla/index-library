@@ -29,6 +29,7 @@
 #define INDEX_CORE_ENTRY
 
 #include "tags.h"
+#include "local.h"
 
 struct index_entry
 {
@@ -42,6 +43,8 @@ struct index_entry
 
 	index_tags tags;
 };
+
+unsigned int entry_count(const index_local& local);
 
 std::string entry_name_of_uint(unsigned int id);
 void add_entry_in_tag(const index_entry& entry, const std::string& tag);
