@@ -25,62 +25,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "entry.h"
+#ifndef INDEX_ADD_ADD
+#define INDEX_ADD_ADD
 
-#include <sstream>
-#include <iomanip>
-#include <fstream>
+#include "../index-core/option.h"
 
-#include <dirent.h>
+void add(Option opt);
 
-// Creates the entry ID of string type and format it with the following :
-//   - 8 hexadecimals digits
-//   - letters in uppercase
-std::string entry_name_of_uint(unsigned int id)
-{
-	std::stringstream ss;
-	ss << std::setbase(16) << id;
-
-	std::string ret(ss.str());
-
-	while(ret.length() < 8)
-		ret.insert(0, "0");
-	
-	for(auto it = ret.begin(); it != ret.end(); it++)
-		if(*it >= 'a' && *it <= 'f')
-			*it -= 'a' - 'A';
-	
-	return ret;
-}
-
-// Add the entry in the tag file.
-// Each entry follow this syntax : ID "title" "filetype" "author" D/M/Y
-void add_entry_in_tag(const index_entry& entry, const std::string& tag)
-{
-	std::ofstream file(tag.c_str(), std::ios::app);
-
-	file << entry_name_of_uint(entry.id);
-	file << " \"" << entry.title << "\" \"" << entry.filetype << "\" \"" << entry.author << "\" ";
-	file << entry.date;
-	file << "\n";
-}
-
-// Computes the count of entries in the entries directory.
-unsigned int entry_count(const index_local& local)
-{
-	DIR* dir = opendir(local.entries.c_str());
-	dirent* ent;
-
-	if(!dir)
-		throw std::string("unfound directory " + local.entries + ".");
-	
-	unsigned int count = 0;
-
-	while(ent = readdir(dir))
-	{
-		count++;
-	}
-
-	return count - 2; // The '.' and '..' are not files !
-}
+#endif
 

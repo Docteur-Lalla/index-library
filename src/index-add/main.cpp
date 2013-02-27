@@ -25,62 +25,36 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "entry.h"
+#include "add.h"
+#include "../index-core/color.h"
 
-#include <sstream>
-#include <iomanip>
-#include <fstream>
-
-#include <dirent.h>
-
-// Creates the entry ID of string type and format it with the following :
-//   - 8 hexadecimals digits
-//   - letters in uppercase
-std::string entry_name_of_uint(unsigned int id)
+Option init_option_system(int argc, char *argv[])
 {
-	std::stringstream ss;
-	ss << std::setbase(16) << id;
+	std::vector<std::string> vec = vector_of_array(argc, argv);
+	std::map<std::string, bool> table = classic_option_table();
 
-	std::string ret(ss.str());
+	table["--file"] = true;
+	table["-f"] = true;
 
-	while(ret.length() < 8)
-		ret.insert(0, "0");
-	
-	for(auto it = ret.begin(); it != ret.end(); it++)
-		if(*it >= 'a' && *it <= 'f')
-			*it -= 'a' - 'A';
-	
-	return ret;
+	Option opt(vec);
+	opt.parse(table);
+
+	return opt;
 }
 
-// Add the entry in the tag file.
-// Each entry follow this syntax : ID "title" "filetype" "author" D/M/Y
-void add_entry_in_tag(const index_entry& entry, const std::string& tag)
+int main(int argc, char* argv[])
 {
-	std::ofstream file(tag.c_str(), std::ios::app);
-
-	file << entry_name_of_uint(entry.id);
-	file << " \"" << entry.title << "\" \"" << entry.filetype << "\" \"" << entry.author << "\" ";
-	file << entry.date;
-	file << "\n";
-}
-
-// Computes the count of entries in the entries directory.
-unsigned int entry_count(const index_local& local)
-{
-	DIR* dir = opendir(local.entries.c_str());
-	dirent* ent;
-
-	if(!dir)
-		throw std::string("unfound directory " + local.entries + ".");
-	
-	unsigned int count = 0;
-
-	while(ent = readdir(dir))
+	try
 	{
-		count++;
+		Option opt(init_option_system(argc, argv));
+		add(opt);
 	}
 
-	return count - 2; // The '.' and '..' are not files !
+	catch(const std::string& str)
+	{
+		print_color(str, RED, DEFAULT, true);
+	}
+
+	return 0;
 }
 

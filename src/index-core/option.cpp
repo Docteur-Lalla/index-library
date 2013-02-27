@@ -98,6 +98,9 @@ std::map<std::string, bool> classic_option_table()
 	table["--verbose"] = false;
 	table["-v"] = false;
 
+	table["--extension"] = true;
+	table["-x"] = true;
+
 	return table;
 }
 
