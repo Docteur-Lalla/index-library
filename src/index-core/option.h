@@ -46,5 +46,7 @@ class Option
 		std::vector<std::string> code;
 };
 
+std::vector<std::string> vector_of_array(int argc, char *argv[]);
+
 #endif
 

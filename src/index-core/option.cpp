@@ -75,3 +75,13 @@ std::string Option::get(const std::string& option)
 	return opts[option];
 }
 
+std::vector<std::string> vector_of_array(int argc, char *argv[])
+{
+	std::vector<std::string> vec;
+
+	for(int i = 1; i < argc; i++)
+		vec.push_back(argv[i]);
+	
+	return vec;
+}
+
