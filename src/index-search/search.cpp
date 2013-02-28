@@ -49,6 +49,23 @@ namespace
 		print_color(entry.date + '\n', GREY);
 	}
 
+	void print_verbose_entry(std::pair<int, index_entry> pair)
+	{
+		index_entry entry = pair.second;
+
+		std::string title = std::string("\"") + entry.title + '"';
+		std::string author = std::string("\"") + entry.author + '"';
+		std::string filetype = std::string("(") + entry.filetype + ')';
+
+		print_color(entry_name_of_uint(entry.id) + ' ', GREEN);
+		print_color("titled ");
+		print_color(title + ' ', PURPLE, DEFAULT, true);
+		print_color(filetype + ' ', PURPLE, DEFAULT, true);
+		print_color("by ");
+		print_color(author + ' ', CYAN);
+		print_color("created the ");
+		print_color(entry.date + '\n', GREY);
+	}
 }
 
 void search(Option opt)
@@ -77,6 +94,9 @@ void search(Option opt)
 	else if(opt.isset("-x"))
 		purge_list_from_extension(entries, opt.get("-x"));
 
-	std::for_each(entries.begin(), entries.end(), print_entry);
+	if(opt.isset("--verbose") || opt.isset("-v"))
+		std::for_each(entries.begin(), entries.end(), print_verbose_entry);
+	else
+		std::for_each(entries.begin(), entries.end(), print_entry);
 }
 
