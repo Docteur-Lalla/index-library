@@ -105,6 +105,28 @@ namespace
 	}
 }
 
+std::list<std::string> parse_input_list(const std::string& input)
+{
+	std::list<std::string> ret;
+	std::string current;
+
+	for(auto it = input.begin(); it != input.end(); it++)
+		if(*it == ' ' && !current.empty())
+		{
+			ret.push_back(current);
+			current.clear();
+		}
+
+		else
+			current += *it;
+	
+	if(!current.empty())
+		ret.push_back(current);
+	
+	return ret;
+}
+
+// We take every entries from tag files.
 void create_list_from_tag_list(std::map<int, index_entry>& entries, const index_tags& tags)
 {
 	index_local local = generate_local();
@@ -131,6 +153,7 @@ void create_list_from_tag_list(std::map<int, index_entry>& entries, const index_
 	}
 }
 
+// We pay attention to the author.
 void purge_list_from_author(std::map<int, index_entry>& entries, const std::string& author)
 {
 	for(auto it = entries.begin(); it != entries.end(); it++)
@@ -138,10 +161,30 @@ void purge_list_from_author(std::map<int, index_entry>& entries, const std::stri
 			entries.erase(it);
 }
 
+// We pay attention to the extension.
 void purge_list_from_extension(std::map<int, index_entry>& entries, const std::string& ext)
 {
 	for(auto it = entries.begin(); it != entries.end(); it++)
 		if(it->second.filetype != ext)
 			entries.erase(it);
+}
+
+// We pay attention to the input.
+void purge_list_from_input(std::map<int, index_entry>& entries, const std::list<std::string>& input)
+{
+	for(auto key : input)
+	{
+		bool neg = true;
+
+		if(key.front() == '-')
+		{
+			neg = false;
+			key.erase(key.begin());
+		}
+
+		for(auto it = entries.begin(); it != entries.end(); it++)
+			if(it->second.title.find(key) == std::string::npos == neg)
+				entries.erase(it);
+	}
 }
 

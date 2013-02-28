@@ -31,10 +31,13 @@
 #include "../index-core/entry.h"
 #include <map>
 
+std::list<std::string> parse_input_list(const std::string& input);
+
 void create_list_from_tag_list(std::map<int, index_entry>& entries, const index_tags& tags);
 
 void purge_list_from_author(std::map<int, index_entry>& entries, const std::string& author);
 void purge_list_from_extension(std::map<int, index_entry>& entries, const std::string& ext);
+void purge_list_from_input(std::map<int, index_entry>& entries, const std::list<std::string>& input);
 
 #endif
 

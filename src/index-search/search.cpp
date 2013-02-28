@@ -93,6 +93,17 @@ void search(Option opt)
 		purge_list_from_extension(entries, opt.get("--extension"));
 	else if(opt.isset("-x"))
 		purge_list_from_extension(entries, opt.get("-x"));
+	
+	// The input is the most important, we must now filter it.
+	std::string input;
+
+	if(opt.isset("--input"))
+		input = opt.get("--input");
+	else if(opt.isset("-i"))
+		input = opt.get("-i");
+	
+	std::list<std::string> filter = parse_input_list(input);
+	purge_list_from_input(entries, filter);
 
 	if(opt.isset("--verbose") || opt.isset("-v"))
 		std::for_each(entries.begin(), entries.end(), print_verbose_entry);
