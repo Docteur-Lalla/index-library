@@ -28,5 +28,10 @@
 #ifndef INDEX_SEARCH_SORT
 #define INDEX_SEARCH_SORT
 
+#include "../index-core/entry.h"
+#include <map>
+
+void create_list_from_tag_list(std::map<int, index_entry>& entries, const index_tags& tags);
+
 #endif
 

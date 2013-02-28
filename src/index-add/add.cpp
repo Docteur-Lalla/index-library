@@ -38,16 +38,16 @@ namespace
 {
 	void print_added(const index_entry& entry)
 	{
-		print_color("Added entry ", DEFAULT, DEFAULT);
+		print_color("Added entry ");
 		print_color(std::string("\"") + entry.title + "\" ", PURPLE, DEFAULT, true);
 		print_color(std::string("(") + entry.filetype + ") ", PURPLE, DEFAULT, true);
-		print_color("by ", DEFAULT, DEFAULT);
-		print_color(entry.author, CYAN, DEFAULT);
-		print_color(" in ", DEFAULT, DEFAULT);
-		print_color(string_of_tags(entry.tags), GREEN, DEFAULT);
-		print_color(" the ", DEFAULT, DEFAULT);
-		print_color(entry.date, GREY, DEFAULT);
-		print_color(".", DEFAULT, DEFAULT);
+		print_color("by ");
+		print_color(entry.author, CYAN);
+		print_color(" in ");
+		print_color(string_of_tags(entry.tags), GREEN);
+		print_color(" the ");
+		print_color(entry.date, GREY);
+		print_color(".\n");
 	}
 }
 

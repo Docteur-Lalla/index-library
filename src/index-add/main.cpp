@@ -49,19 +49,18 @@ int main(int argc, char* argv[])
 		Option opt(init_option_system(argc, argv));
 
 		if(opt.isset("--version") || opt.isset("-V"))
-			print_color("index-add 0.1 alpha, part of index-library 0.1 alpha.", DEFAULT, DEFAULT);
+			print_color("index-add 0.1 alpha, part of index-library 0.1 alpha.\n");
 		else if(opt.isset("--help") || opt.isset("-h"))
-			print_color("Type 'man index-add' in your terminal to get helped.", DEFAULT, DEFAULT);
+			print_color("Type 'man index-add' in your terminal to get helped.\n");
 		else
 			add(opt);
 	}
 
 	catch(const std::string& str)
 	{
-		print_color(str, RED, DEFAULT, true);
+		print_color(str + '\n', RED, DEFAULT, true);
 	}
 
-	std::cout << std::endl;
 	return 0;
 }
 

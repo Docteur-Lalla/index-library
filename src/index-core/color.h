@@ -44,7 +44,7 @@ enum IndexColor
 	GREY = 37
 };
 
-void print_color(const std::string& msg, IndexColor fore, IndexColor back, bool enlighted = false);
+void print_color(const std::string& msg, IndexColor fore = DEFAULT, IndexColor back = DEFAULT, bool enlighted = false);
 
 #endif
 

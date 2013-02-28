@@ -26,6 +26,7 @@
  */
 
 #include "search.h"
+#include "../index-core/color.h"
 
 Option init_option_system(int argc, char* argv[])
 {
@@ -54,9 +55,9 @@ int main(int argc, char* argv[])
 		Option opt(init_option_system(argc, argv));
 
 		if(opt.isset("--version") || opt.isset("-V"))
-			print_color("index-search 0.1 alpha, part of index-library 0.1 alpha.", DEFAULT, DEFAULT);
+			print_color("index-search 0.1 alpha, part of index-library 0.1 alpha.\n");
 		else if(opt.isset("--help") || opt.isset("-h"))
-			print_color("Type 'man index-search' in your terminal to get helped.", DEFAULT, DEFAULT);
+			print_color("Type 'man index-search' in your terminal to get helped.");
 		else
 			search(opt);
 	}
