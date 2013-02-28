@@ -29,6 +29,7 @@
 #define INDEX_CORE_COLOR
 
 #include <string>
+#include <iostream>
 
 enum IndexColor
 {
@@ -43,7 +44,7 @@ enum IndexColor
 	GREY = 37
 };
 
-void print_color(const std::string& msg, IndexColor fore, IndexColor back, bool enlighted = true);
+void print_color(const std::string& msg, IndexColor fore, IndexColor back, bool enlighted = false);
 
 #endif
 

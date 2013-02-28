@@ -30,11 +30,26 @@
 #include "../index-core/entry.h"
 #include "../index-core/color.h"
 
-#include <ctime>
+#include <time.h>
 #include <fstream>
 #include <sstream>
 
-#include <iostream>
+namespace
+{
+	void print_added(const index_entry& entry)
+	{
+		print_color("Added entry ", DEFAULT, DEFAULT);
+		print_color(std::string("\"") + entry.title + "\" ", PURPLE, DEFAULT, true);
+		print_color(std::string("(") + entry.filetype + ") ", PURPLE, DEFAULT, true);
+		print_color("by ", DEFAULT, DEFAULT);
+		print_color(entry.author, CYAN, DEFAULT);
+		print_color(" in ", DEFAULT, DEFAULT);
+		print_color(string_of_tags(entry.tags), GREEN, DEFAULT);
+		print_color(" the ", DEFAULT, DEFAULT);
+		print_color(entry.date, GREY, DEFAULT);
+		print_color(".", DEFAULT, DEFAULT);
+	}
+}
 
 void add(Option opt)
 {
@@ -50,13 +65,13 @@ void add(Option opt)
 
 	// First, the ID. We create IDs from 0 to the max. If it already exists, we test the following.
 
-	unsigned int id = entry_count(local);
-	
+	unsigned int id = 0;
+
 	// Then, the title, the extension and the author. The option system must have them.
 
-	std::string title;
-	std::string author;
-	std::string extension;
+	std::string title("");
+	std::string author("");
+	std::string extension("");
 
 	if(opt.isset("--title"))
 		title = opt.get("--title");
@@ -91,17 +106,16 @@ void add(Option opt)
 	else
 		throw std::string("no tag list specified to create the entry.");
 	
-	std::string date;
-	time_t* timer;
+	std::string date("");
+	time_t timer;
 
 	tm* d;
 
-	time(timer);
-	d = localtime(timer);
+	time(&timer);
+	d = localtime(&timer);
 
 	std::stringstream ss;
 	ss << d->tm_mday << '/' << d->tm_mon + 1 << '/' << d->tm_year + 1900;
-
 	date = ss.str();
 
 	// We create the entry.
@@ -134,8 +148,13 @@ void add(Option opt)
 
 	while(getline(in, line))
 		out << line << std::endl;
-
+	
 	for(auto it = tags.begin(); it != tags.end(); it++)
 		add_entry_in_tag(entry, local.tags + '/' + *it);
+	
+	// If the verbose option is set, let's add a sentence.
+
+	if(opt.isset("--verbose") || opt.isset("-v"))
+		print_added(entry);
 }
 

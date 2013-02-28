@@ -26,6 +26,7 @@
  */
 
 #include "tags.h"
+#include "color.h"
 
 // Takes the tag list and create a long string from the concatenation of each tag.
 std::string string_of_tags(const std::list<std::string>& tags)
@@ -42,21 +43,25 @@ std::string string_of_tags(const std::list<std::string>& tags)
 std::list<std::string> tags_of_string(const std::string& str)
 {
 	std::list<std::string> ret;
-	std::string current;
-
-	for(auto it = str.begin(); it != str.end(); it++)
+	
+	if(!str.empty())
 	{
-		if(*it != '/')
-			current += *it;
-		else
-		{
-			ret.push_back(current);
-			current.clear();
-		}
-	}
+		std::string current;
 
-	if(str.back() != '/')
-		ret.push_back(current);
+		for(auto it = str.begin(); it != str.end(); it++)
+		{
+			if(*it != '/')
+				current += *it;
+			else
+			{
+				ret.push_back(current);
+				current.clear();
+			}
+		}
+
+		if(str.back() != '/')
+			ret.push_back(current);
+	}
 	
 	return ret;
 }

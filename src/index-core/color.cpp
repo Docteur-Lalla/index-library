@@ -26,21 +26,22 @@
  */
 
 #include "color.h"
-
 #include <sstream>
-#include <iostream>
 
 void print_color(const std::string& msg, IndexColor fore, IndexColor back, bool enlighted)
 {
-	std::stringstream ss;
-	ss << "\033[";
+	if(!msg.empty())
+	{
+		std::stringstream ss;
+		ss << "\033[";
 	
-	if(enlighted)
-		ss << "1;";
+		if(enlighted)
+			ss << "1;";
 	
-	ss << fore << ";" << back + 10 << "m" << msg;
-	ss << "\033[0;0m";
+		ss << fore << ";" << back + 10 << "m";
+		ss << msg << "\033[0;0m";
 
-	std::cout << ss.str();
+		std::cout << ss.str();
+	}
 }
 

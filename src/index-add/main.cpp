@@ -31,10 +31,10 @@
 Option init_option_system(int argc, char *argv[])
 {
 	std::vector<std::string> vec = vector_of_array(argc, argv);
-	std::map<std::string, bool> table = classic_option_table();
+	std::map<std::string, bool> table(classic_option_table());
 
-	table["--file"] = true;
-	table["-f"] = true;
+	table.insert(std::pair<std::string, bool>("--file", true));
+	table.insert(std::pair<std::string, bool>("-f", true));
 
 	Option opt(vec);
 	opt.parse(table);
@@ -47,7 +47,13 @@ int main(int argc, char* argv[])
 	try
 	{
 		Option opt(init_option_system(argc, argv));
-		add(opt);
+
+		if(opt.isset("--version") || opt.isset("-V"))
+			print_color("index-add 0.1 alpha, part of index-library 0.1 alpha.", DEFAULT, DEFAULT);
+		else if(opt.isset("--help") || opt.isset("-h"))
+			print_color("Type 'man index-add' in your terminal to get helped.", DEFAULT, DEFAULT);
+		else
+			add(opt);
 	}
 
 	catch(const std::string& str)
@@ -55,6 +61,7 @@ int main(int argc, char* argv[])
 		print_color(str, RED, DEFAULT, true);
 	}
 
+	std::cout << std::endl;
 	return 0;
 }
 

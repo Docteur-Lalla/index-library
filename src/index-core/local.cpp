@@ -28,23 +28,52 @@
 #include "local.h"
 #include <fstream>
 
+#include "color.h"
+
 namespace
 {
+	std::string get_command_name(const std::string& str)
+	{
+		std::string cmd;
+
+		for(auto it = str.begin(); *it != '='; it++)
+			cmd += *it;
+
+		return cmd;
+	}
+
+	std::string get_command_value(const std::string& str)
+	{
+		std::string::const_iterator it = str.begin();
+		std::string value;
+
+		for(; *it != '='; it++);
+		it++;
+
+		// We are now in the right place to get the command value.
+		for(; it != str.end(); it++)
+			value += *it;
+
+		return value;
+	}
+
 	void analyze_line(index_local& local, std::string line)
 	{
 		if(line.front() == '#')
 			return;
+		else if(line.empty())
+			return;
 
-		std::string cmd = line.substr(0, line.find_first_of('='));
+		std::string cmd = get_command_name(line);
 
 		if(cmd == "MAIN")
-			local.main = line.substr(line.find_first_of('=') + 1);
+			local.main = get_command_value(line);
 		else if(cmd == "TAGS")
-			local.tags = line.substr(line.find_first_of('=') + 1);
+			local.tags = get_command_value(line);
 		else if(cmd == "ENTRY")
-			local.entries = line.substr(line.find_first_of('=') + 1);
-		else
-			local.cmds[cmd] = line.substr(line.find_first_of('=') + 1);
+			local.entries = get_command_value(line);
+		//else
+			//local.cmds[cmd] = get_command_value(line);
 	}
 
 }
@@ -66,7 +95,7 @@ index_local generate_local()
 
 	else
 		throw std::string("unfound /etc/index.conf.");
-	
+
 	return local;
 }
 
