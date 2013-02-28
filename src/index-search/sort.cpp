@@ -131,3 +131,17 @@ void create_list_from_tag_list(std::map<int, index_entry>& entries, const index_
 	}
 }
 
+void purge_list_from_author(std::map<int, index_entry>& entries, const std::string& author)
+{
+	for(auto it = entries.begin(); it != entries.end(); it++)
+		if(it->second.author != author)
+			entries.erase(it);
+}
+
+void purge_list_from_extension(std::map<int, index_entry>& entries, const std::string& ext)
+{
+	for(auto it = entries.begin(); it != entries.end(); it++)
+		if(it->second.filetype != ext)
+			entries.erase(it);
+}
+

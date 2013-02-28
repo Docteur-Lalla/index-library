@@ -65,7 +65,7 @@ void add(Option opt)
 
 	// First, the ID. We create IDs from 0 to the max. If it already exists, we test the following.
 
-	unsigned int id = 0;
+	unsigned int id = entry_count(local);
 
 	// Then, the title, the extension and the author. The option system must have them.
 

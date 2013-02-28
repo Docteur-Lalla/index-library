@@ -33,5 +33,8 @@
 
 void create_list_from_tag_list(std::map<int, index_entry>& entries, const index_tags& tags);
 
+void purge_list_from_author(std::map<int, index_entry>& entries, const std::string& author);
+void purge_list_from_extension(std::map<int, index_entry>& entries, const std::string& ext);
+
 #endif
 

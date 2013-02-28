@@ -65,6 +65,18 @@ void search(Option opt)
 	
 	create_list_from_tag_list(entries, tags);
 
+	// If an author or an extension if looked for, we must purge the list.
+
+	if(opt.isset("--by"))
+		purge_list_from_author(entries, opt.get("--by"));
+	else if(opt.isset("-b"))
+		purge_list_from_author(entries, opt.get("-b"));
+
+	if(opt.isset("--extension"))
+		purge_list_from_extension(entries, opt.get("--extension"));
+	else if(opt.isset("-x"))
+		purge_list_from_extension(entries, opt.get("-x"));
+
 	std::for_each(entries.begin(), entries.end(), print_entry);
 }
 
