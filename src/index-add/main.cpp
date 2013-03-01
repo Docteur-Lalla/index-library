@@ -28,11 +28,14 @@
 #include "add.h"
 #include "../index-core/color.h"
 
+// Function to initialize the option system.
 Option init_option_system(int argc, char *argv[])
 {
+	// We create a classic option table.
 	std::vector<std::string> vec = vector_of_array(argc, argv);
 	std::map<std::string, bool> table(classic_option_table());
 
+	// Then we add the specific option of index-add (--file and -f).
 	table.insert(std::pair<std::string, bool>("--file", true));
 	table.insert(std::pair<std::string, bool>("-f", true));
 
@@ -48,11 +51,12 @@ int main(int argc, char* argv[])
 	{
 		Option opt(init_option_system(argc, argv));
 
+		// We check if the version option or the help is looked for.
 		if(opt.isset("--version") || opt.isset("-V"))
 			print_color("index-add 0.1 alpha, part of index-library 0.1 alpha.\n");
 		else if(opt.isset("--help") || opt.isset("-h"))
 			print_color("Type 'man index-add' in your terminal to get helped.\n");
-		else
+		else // else we can add a file to the library.
 			add(opt);
 	}
 

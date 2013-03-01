@@ -28,17 +28,23 @@
 #include "search.h"
 #include "../index-core/color.h"
 
+// Function to initialize the option system.
 Option init_option_system(int argc, char* argv[])
 {
+	// Creation of the classic option table.
 	std::vector<std::string> vec = vector_of_array(argc, argv);
 	std::map<std::string, bool> table(classic_option_table());
 
+	// Addition of the specific options of index-search.
+	// The input of the search.
 	table["--input"] = true;
 	table["-i"] = true;
 
+	// If we have only one entry, we execute a command on it.
 	table["--exec"] = true;
 	table["-e"] = true;
 
+	// Execute a command on each entry set in output.
 	table["--execlist"] = true;
 	table["-E"] = true;
 
@@ -54,6 +60,7 @@ int main(int argc, char* argv[])
 	{
 		Option opt(init_option_system(argc, argv));
 
+		// Check the version option and the help option.
 		if(opt.isset("--version") || opt.isset("-V"))
 			print_color("index-search 0.1 alpha, part of index-library 0.1 alpha.\n");
 		else if(opt.isset("--help") || opt.isset("-h"))

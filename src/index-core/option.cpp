@@ -37,9 +37,10 @@ void Option::parse(const std::map<std::string, bool>& table)
 
 	for(auto it = code.begin(); it != code.end(); it++)
 	{
+		// If the option appears in the option table, we parse it.
 		if(tab.find(*it) != tab.end())
 		{
-			if(tab[(*it)])
+			if(tab[(*it)]) // If we need an argument, we get it.
 			{
 				std::string key = *it;
 				it++;
@@ -54,7 +55,7 @@ void Option::parse(const std::map<std::string, bool>& table)
 				opts[*it] = "set";
 		}
 
-		else
+		else // If the option is not in the table, this is an error.
 			throw std::string("unknown option ") + *it + ".";
 	}
 }
