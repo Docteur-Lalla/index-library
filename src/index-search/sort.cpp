@@ -33,6 +33,14 @@
 
 namespace
 {
+	void parse_string(const std::string& line, std::string& out, std::string::iterator& it)
+	{
+		for(; it != line.end() && *it != '"'; it++)
+			out += *it;
+
+		it++;
+	}
+
 	index_entry parse_tag_line(std::string line)
 	{
 		// We first get the ID.
@@ -52,10 +60,7 @@ namespace
 
 		it++;
 
-		for(; it != line.end() && *it != '"'; it++)
-			title += *it;
-
-		it++;
+		parse_string(line, title, it);
 
 		// The title is ready, we can get the extension.
 		if(*it == ' ')
@@ -67,11 +72,7 @@ namespace
 		it++;
 
 		std::string ext("");
-
-		for(; *it != '"'; it++)
-			ext += *it;
-
-		it++;
+		parse_string(line, ext, it);
 
 		// Then, we get the author.
 
@@ -82,10 +83,7 @@ namespace
 
 		it++;
 
-		for(; *it != '"'; it++)
-			author += *it;
-
-		it++;
+		parse_string(line, author, it);
 		it++;
 
 		// Finally, we get the date !
