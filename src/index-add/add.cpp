@@ -124,6 +124,36 @@ namespace
 		ss << d->tm_mday << '/' << d->tm_mon + 1 << '/' << d->tm_year + 1900;
 		return ss.str();
 	}
+
+	// A simple function to get the filename of the document to put in the library.
+	std::string get_filename(Option opt)
+	{
+		std::string filename;
+
+		if(opt.isset("--file"))
+			filename = opt.get("--file");
+		else if(opt.isset("-f"))
+			filename = opt.get("-f");
+		else
+			throw std::string("no file to put in the library.");
+
+		return filename;
+	}
+
+	void write_entry(const index_local& local, const std::string& filename, unsigned int id)
+	{
+		// We put the content of the file into the new entry in the entries directory.
+
+		std::string outname = local.entries + '/' + entry_name_of_uint(id);
+
+		std::ofstream out(outname.c_str(), std::ios::trunc);
+		std::ifstream in(filename.c_str());
+
+		std::string line;
+
+		while(getline(in, line))
+			out << line << std::endl;
+	}
 }
 
 void add(Option opt)
@@ -164,27 +194,12 @@ void add(Option opt)
 	entry.tags = tags;
 	entry.date = date;
 
-	std::string filename;
+	std::string filename(get_filename(opt));
 
-	if(opt.isset("--file"))
-		filename = opt.get("--file");
-	else if(opt.isset("-f"))
-		filename = opt.get("-f");
-	else
-		throw std::string("no file to put in the library.");
+	// We create the entry file in the entries directory.
+	write_entry(local, filename, id);
 
-	// We put the content of the file into the new entry in the entries directory.
-
-	std::string outname = local.entries + '/' + entry_name_of_uint(id);
-
-	std::ofstream out(outname.c_str(), std::ios::trunc);
-	std::ifstream in(filename.c_str());
-
-	std::string line;
-
-	while(getline(in, line))
-		out << line << std::endl;
-	
+	// We add a line at each tag file specified.
 	for(auto it = tags.begin(); it != tags.end(); it++)
 		add_entry_in_tag(entry, local.tags + '/' + *it);
 	
