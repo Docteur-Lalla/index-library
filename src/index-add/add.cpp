@@ -49,6 +49,81 @@ namespace
 		print_color(entry.date, GREY);
 		print_color(".\n");
 	}
+
+	// A simple function to get the title of the entry.
+	std::string get_title(Option opt)
+	{
+		std::string title;
+
+		if(opt.isset("--title"))
+			title = opt.get("--title");
+		else if(opt.isset("-T"))
+			title = opt.get("-T");
+		else
+			throw std::string("unspecified title for the entry.");
+
+		return title;
+	}
+
+	// A simple function to get the author of the entry.
+	std::string get_author(Option opt)
+	{
+		std::string author;
+
+		if(opt.isset("--by"))
+			author = opt.get("--by");
+		else if(opt.isset("-b"))
+			author = opt.get("-b");
+		else
+			author = "Someone";
+	
+		return author;
+	}
+
+	// A simple function to get the extension of the entry.
+	std::string get_extension(Option opt)
+	{
+		std::string extension;
+
+		if(opt.isset("--extension"))
+			extension = opt.get("--extension");
+		else if(opt.isset("-x"))
+			extension = opt.get("-x");
+		else
+			extension = "txt";
+	
+		return extension;
+	}
+
+	// A simple function to get the tags list of the entry.
+	index_tags get_tags(Option opt)
+	{
+		index_tags tags;
+
+		if(opt.isset("--tags"))
+			tags = tags_of_string(opt.get("--tags"));
+		else if(opt.isset("-t"))
+			tags = tags_of_string(opt.get("-t"));
+		else
+			throw std::string("no tag list specified to create the entry.");
+	
+		return tags;
+	}
+
+	// A function to get a formatted date of creation of the entry.
+	std::string get_date()
+	{
+		time_t timer;
+
+		tm* d;
+
+		time(&timer);
+		d = localtime(&timer);
+
+		std::stringstream ss;
+		ss << d->tm_mday << '/' << d->tm_mon + 1 << '/' << d->tm_year + 1900;
+		return ss.str();
+	}
 }
 
 void add(Option opt)
@@ -69,54 +144,15 @@ void add(Option opt)
 
 	// Then, the title, the extension and the author. The option system must have them.
 
-	std::string title("");
-	std::string author("");
-	std::string extension("");
+	std::string title(get_title(opt));
+	std::string author(get_author(opt));
+	std::string extension(get_extension(opt));
 
-	if(opt.isset("--title"))
-		title = opt.get("--title");
-	else if(opt.isset("-T"))
-		title = opt.get("-T");
-	else
-		throw std::string("unspecified title for the entry.");
-	
-	if(opt.isset("--by"))
-		author = opt.get("--by");
-	else if(opt.isset("-b"))
-		author = opt.get("-b");
-	else
-		author = "Someone";
-	
-	if(opt.isset("--extension"))
-		extension = opt.get("--extension");
-	else if(opt.isset("-x"))
-		extension = opt.get("-x");
-	else
-		extension = "txt";
-	
 	// Finally, we must get the date and the tag list.
 	// The option system has the tag list and the date can be easily created.
 
-	index_tags tags;
-
-	if(opt.isset("--tags"))
-		tags = tags_of_string(opt.get("--tags"));
-	else if(opt.isset("-t"))
-		tags = tags_of_string(opt.get("-t"));
-	else
-		throw std::string("no tag list specified to create the entry.");
-	
-	std::string date("");
-	time_t timer;
-
-	tm* d;
-
-	time(&timer);
-	d = localtime(&timer);
-
-	std::stringstream ss;
-	ss << d->tm_mday << '/' << d->tm_mon + 1 << '/' << d->tm_year + 1900;
-	date = ss.str();
+	index_tags tags = get_tags(opt);
+	std::string date(get_date());
 
 	// We create the entry.
 
