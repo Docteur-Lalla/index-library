@@ -205,7 +205,7 @@ void execute_command(unsigned int id, const std::string& exec)
 
 void execute_list_command(const std::map<unsigned int, index_entry>& entries, const std::string& exec)
 {
-	for(auto it = entries.begin(); it != entries.end(); it++)
-		execute_command(it->first, exec);
+	for(auto it : entries)
+		execute_command(it.first, exec);
 }
 

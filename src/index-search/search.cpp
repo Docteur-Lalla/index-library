@@ -148,7 +148,7 @@ void search(Option opt)
 			exec = opt.get("-e");
 
 		// Execute a command on the only one result.
-		if(entries.size() == 1)
+		if(entries.size() == 1 && (opt.isset("--exec") || opt.isset("-e")))
 			execute_command(entries.begin()->first, exec);
 		else
 		{
@@ -160,7 +160,7 @@ void search(Option opt)
 				execlist = opt.get("-E");
 
 			// Execute a command on each result.
-			execute_list_command(entries, exec);
+			execute_list_command(entries, execlist);
 		}
 	}
 
