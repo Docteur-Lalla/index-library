@@ -148,17 +148,20 @@ void search(Option opt)
 			exec = opt.get("-e");
 
 		// Execute a command on the only one result.
-		execute_command(entries.begin()->first, exec);
+		if(entries.size() == 1)
+			execute_command(entries.begin()->first, exec);
+		else
+		{
+			std::string execlist;
 
-		std::string execlist;
+			if(opt.isset("--execlist"))
+				execlist = opt.get("--execlist");
+			else if(opt.isset("-E"))
+				execlist = opt.get("-E");
 
-		if(opt.isset("--execlist"))
-			execlist = opt.get("--execlist");
-		else if(opt.isset("-E"))
-			execlist = opt.get("-E");
-
-		// Execute a command on each result.
-		execute_list_command(entries, exec);
+			// Execute a command on each result.
+			execute_list_command(entries, exec);
+		}
 	}
 
 	else

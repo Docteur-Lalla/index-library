@@ -30,6 +30,9 @@
 #include "../index-core/local.h"
 
 #include <fstream>
+#include <vector>
+
+#include <unistd.h>
 
 namespace
 {
@@ -188,9 +191,21 @@ void purge_list_from_input(std::map<unsigned int, index_entry>& entries, const s
 
 void execute_command(unsigned int id, const std::string& exec)
 {
+	index_local local = generate_local();
+
+	std::string cmd(exec);
+
+	size_t pos = cmd.find("$$");
+	if(pos != std::string::npos)
+	{
+		cmd.replace(pos, 2, local.entries + '/' + entry_name_of_uint(id));
+		system(cmd.c_str());
+	}
 }
 
 void execute_list_command(const std::map<unsigned int, index_entry>& entries, const std::string& exec)
 {
+	for(auto it = entries.begin(); it != entries.end(); it++)
+		execute_command(it->first, exec);
 }
 
