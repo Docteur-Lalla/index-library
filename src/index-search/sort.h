@@ -33,11 +33,14 @@
 
 std::list<std::string> parse_input_list(const std::string& input);
 
-void create_list_from_tag_list(std::map<int, index_entry>& entries, const index_tags& tags);
+void create_list_from_tag_list(std::map<unsigned int, index_entry>& entries, const index_tags& tags);
 
-void purge_list_from_author(std::map<int, index_entry>& entries, const std::string& author);
-void purge_list_from_extension(std::map<int, index_entry>& entries, const std::string& ext);
-void purge_list_from_input(std::map<int, index_entry>& entries, const std::list<std::string>& input);
+void purge_list_from_author(std::map<unsigned int, index_entry>& entries, const std::string& author);
+void purge_list_from_extension(std::map<unsigned int, index_entry>& entries, const std::string& ext);
+void purge_list_from_input(std::map<unsigned int, index_entry>& entries, const std::list<std::string>& input);
+
+void execute_command(unsigned int id, const std::string& exec);
+void execute_list_command(const std::map<unsigned int, index_entry>& entries, const std::string& exec);
 
 #endif
 

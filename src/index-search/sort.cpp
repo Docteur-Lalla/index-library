@@ -125,7 +125,7 @@ std::list<std::string> parse_input_list(const std::string& input)
 }
 
 // We take every entries from tag files.
-void create_list_from_tag_list(std::map<int, index_entry>& entries, const index_tags& tags)
+void create_list_from_tag_list(std::map<unsigned int, index_entry>& entries, const index_tags& tags)
 {
 	index_local local = generate_local();
 
@@ -152,7 +152,7 @@ void create_list_from_tag_list(std::map<int, index_entry>& entries, const index_
 }
 
 // We pay attention to the author.
-void purge_list_from_author(std::map<int, index_entry>& entries, const std::string& author)
+void purge_list_from_author(std::map<unsigned int, index_entry>& entries, const std::string& author)
 {
 	for(auto it = entries.begin(); it != entries.end(); it++)
 		if(it->second.author != author)
@@ -160,7 +160,7 @@ void purge_list_from_author(std::map<int, index_entry>& entries, const std::stri
 }
 
 // We pay attention to the extension.
-void purge_list_from_extension(std::map<int, index_entry>& entries, const std::string& ext)
+void purge_list_from_extension(std::map<unsigned int, index_entry>& entries, const std::string& ext)
 {
 	for(auto it = entries.begin(); it != entries.end(); it++)
 		if(it->second.filetype != ext)
@@ -168,7 +168,7 @@ void purge_list_from_extension(std::map<int, index_entry>& entries, const std::s
 }
 
 // We pay attention to the input.
-void purge_list_from_input(std::map<int, index_entry>& entries, const std::list<std::string>& input)
+void purge_list_from_input(std::map<unsigned int, index_entry>& entries, const std::list<std::string>& input)
 {
 	for(auto key : input)
 	{
@@ -184,5 +184,13 @@ void purge_list_from_input(std::map<int, index_entry>& entries, const std::list<
 			if(it->second.title.find(key) == std::string::npos == neg)
 				entries.erase(it);
 	}
+}
+
+void execute_command(unsigned int id, const std::string& exec)
+{
+}
+
+void execute_list_command(const std::map<unsigned int, index_entry>& entries, const std::string& exec)
+{
 }
 

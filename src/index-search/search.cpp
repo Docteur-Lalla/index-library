@@ -34,7 +34,53 @@
 
 namespace
 {
-	void print_entry(std::pair<int, index_entry> pair)
+	inline bool isset_exec(Option opt)
+	{
+		if(opt.isset("--exec"))
+			return true;
+		else if(opt.isset("-e"))
+			return true;
+		else if(opt.isset("--execlist"))
+			return true;
+		else if(opt.isset("-E"))
+			return true;
+
+		return false;
+	}
+
+	// A little function the get the tags list.
+	index_tags get_tags(Option opt)
+	{
+		index_tags tags;
+
+		if(opt.isset("--tags"))
+			tags = tags_of_string(opt.get("--tags"));
+		else if(opt.isset("-t"))
+			tags = tags_of_string(opt.get("-t"));
+		else
+			throw std::string("lack of tag list to sort entries.");
+	
+		return tags;
+	}
+
+	// Procedure to purge the entries list by author's name and file's extension.
+	void purge_by_author_and_extension(std::map<unsigned int, index_entry>& entries, Option opt)
+	{
+		// Purge by author.
+		if(opt.isset("--by"))
+			purge_list_from_author(entries, opt.get("--by"));
+		else if(opt.isset("-b"))
+			purge_list_from_author(entries, opt.get("-b"));
+
+		// Purge by extension.
+		if(opt.isset("--extension"))
+			purge_list_from_extension(entries, opt.get("--extension"));
+		else if(opt.isset("-x"))
+			purge_list_from_extension(entries, opt.get("-x"));
+	}
+
+	// Print the entries with color.
+	void print_entry(std::pair<unsigned int, index_entry> pair)
 	{
 		index_entry entry = pair.second;
 
@@ -49,7 +95,8 @@ namespace
 		print_color(entry.date + '\n', GREY);
 	}
 
-	void print_verbose_entry(std::pair<int, index_entry> pair)
+	// Print the entries with color and full sentences.
+	void print_verbose_entry(std::pair<unsigned int, index_entry> pair)
 	{
 		index_entry entry = pair.second;
 
@@ -70,30 +117,14 @@ namespace
 
 void search(Option opt)
 {
-	std::map<int, index_entry> entries;
-	index_tags tags;
-
-	if(opt.isset("--tags"))
-		tags = tags_of_string(opt.get("--tags"));
-	else if(opt.isset("-t"))
-		tags = tags_of_string(opt.get("-t"));
-	else
-		throw std::string("lack of tag list to sort entries.");
+	std::map<unsigned int, index_entry> entries;
+	index_tags tags = get_tags(opt);
 	
 	create_list_from_tag_list(entries, tags);
 
 	// If an author or an extension if looked for, we must purge the list.
+	purge_by_author_and_extension(entries, opt);
 
-	if(opt.isset("--by"))
-		purge_list_from_author(entries, opt.get("--by"));
-	else if(opt.isset("-b"))
-		purge_list_from_author(entries, opt.get("-b"));
-
-	if(opt.isset("--extension"))
-		purge_list_from_extension(entries, opt.get("--extension"));
-	else if(opt.isset("-x"))
-		purge_list_from_extension(entries, opt.get("-x"));
-	
 	// The input is the most important, we must now filter it.
 	std::string input;
 
@@ -105,9 +136,37 @@ void search(Option opt)
 	std::list<std::string> filter = parse_input_list(input);
 	purge_list_from_input(entries, filter);
 
-	if(opt.isset("--verbose") || opt.isset("-v"))
-		std::for_each(entries.begin(), entries.end(), print_verbose_entry);
+	// We have now 2 possibilities : display the results or execute a command on them.
+	// Checks in the option system if we must execute a command.
+	if(isset_exec(opt))
+	{
+		std::string exec;
+
+		if(opt.isset("--exec"))
+			exec = opt.get("--exec");
+		else if(opt.isset("-e"))
+			exec = opt.get("-e");
+
+		// Execute a command on the only one result.
+		execute_command(entries.begin()->first, exec);
+
+		std::string execlist;
+
+		if(opt.isset("--execlist"))
+			execlist = opt.get("--execlist");
+		else if(opt.isset("-E"))
+			execlist = opt.get("-E");
+
+		// Execute a command on each result.
+		execute_list_command(entries, exec);
+	}
+
 	else
-		std::for_each(entries.begin(), entries.end(), print_entry);
+	{
+		if(opt.isset("--verbose") || opt.isset("-v"))
+			std::for_each(entries.begin(), entries.end(), print_verbose_entry);
+		else
+			std::for_each(entries.begin(), entries.end(), print_entry);
+	}
 }
 
