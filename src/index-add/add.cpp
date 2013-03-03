@@ -29,8 +29,10 @@
 
 #include "../index-core/entry.h"
 #include "../index-core/color.h"
+#include "../index-core/city.h"
 
 #include <time.h>
+#include <chrono>
 #include <fstream>
 #include <sstream>
 
@@ -168,21 +170,26 @@ void add(Option opt)
 	//   - Entry's tags
 	//   - Entry's ID
 
-	// First, the ID. We create IDs from 0 to the max. If it already exists, we test the following.
-
-	unsigned int id = entry_count(local);
-
-	// Then, the title, the extension and the author. The option system must have them.
+	// First, the title, the extension and the author. The option system must have them.
 
 	std::string title(get_title(opt));
 	std::string author(get_author(opt));
 	std::string extension(get_extension(opt));
 
-	// Finally, we must get the date and the tag list.
+	// Then, we must get the date and the tag list.
 	// The option system has the tag list and the date can be easily created.
 
 	index_tags tags = get_tags(opt);
 	std::string date(get_date());
+
+	// Finally, the ID. We use Google's CityHash64 (thank them for it).
+	// The string to hash is : title + author + extension + date + clock (clock = now).
+
+	time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());	
+	std::string clock(ctime(&now));
+
+	std::string total(title+author+extension+date+clock);
+	unsigned int id = CityHash64(total.c_str(), total.length());
 
 	// We create the entry.
 
