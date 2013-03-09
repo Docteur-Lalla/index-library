@@ -26,8 +26,85 @@
  */
 
 #include "remove.h"
+#include "../index-core/local.h"
 
-void remove(Option opt)
+#include <cstdio>
+#include <fstream>
+#include <dirent.h>
+
+// Search the entry ID in the tag file and returns -1 if it did not find it else, it return the line count.
+int search_in_file(const std::string& id, const std::string& filename)
 {
+	std::string line;
+	std::ifstream file(filename.c_str());
+
+	int count = 0;
+
+	while(getline(file, line))
+	{
+		std::string ID(line.substr(0, 8));
+
+		if(id.compare(ID))
+			return count;
+		
+		count++;
+	}
+
+	return -1;
+}
+
+// Rewrite the tag file without the removed line.
+void transfert_file(const std::string& infile, int count)
+{
+	std::string content;
+	std::string line;
+
+	std::ifstream file(infile.c_str());
+
+	int c = 0;
+
+	while(getline(file, line))
+	{
+		if(count != c)
+			content += line + '\n';
+
+	}
+
+	file.close();
+
+	std::ofstream out(infile.c_str(), std::ios::trunc);
+
+	out << content;
+}
+
+void remove_entry(const std::string& ID, const index_local& local)
+{
+	std::ifstream file((local.entries + '/' + ID).c_str());
+
+	if(file)
+	{
+		file.close();
+		remove((local.entries + '/' + ID).c_str());
+	}
+
+	else
+		throw std::string("unfound entry #") + ID + '.';
+}
+
+void index_remove(Option opt)
+{
+	std::string ID;
+
+	if(opt.isset("--entry"))
+		ID = opt.get("--entry");
+	else if(opt.isset("-n"))
+		ID = opt.get("-n");
+	else
+		throw std::string("entry ID unspecified and needed to remove the entry.");
+	
+	index_local local = generate_local();
+
+	// Remove the file in the entries' directory.
+	remove_entry(ID, local);
 }
 

@@ -31,7 +31,7 @@
 #include "../index-core/option.h"
 #include "../index-core/color.h"
 
-void remove(Option opt);
+void index_remove(Option opt);
 
 #endif
 

@@ -55,12 +55,12 @@ int main(int argc, char* argv[])
 		else if(opt.isset("--version") || opt.isset("-V"))
 			print_color("index-remove 0.1 alpha, part of index-library 0.1 alpha.\n");
 		else
-			remove(opt);
+			index_remove(opt);
 	}
 
 	catch(const std::string& str)
 	{
-		print_color(str, RED);
+		print_color(str + '\n', RED);
 	}
 }
 
