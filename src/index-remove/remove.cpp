@@ -44,7 +44,7 @@ int search_in_file(const std::string& id, const std::string& filename)
 	{
 		std::string ID(line.substr(0, 8));
 
-		if(id.compare(ID))
+		if(id == ID)
 			return count;
 		
 		count++;
@@ -67,7 +67,8 @@ void transfert_file(const std::string& infile, int count)
 	{
 		if(count != c)
 			content += line + '\n';
-
+	
+		c++;
 	}
 
 	file.close();
@@ -77,6 +78,7 @@ void transfert_file(const std::string& infile, int count)
 	out << content;
 }
 
+// Remove specified entry in the entries directory.
 void remove_entry(const std::string& ID, const index_local& local)
 {
 	std::ifstream file((local.entries + '/' + ID).c_str());
@@ -106,5 +108,22 @@ void index_remove(Option opt)
 
 	// Remove the file in the entries' directory.
 	remove_entry(ID, local);
+
+	DIR* tags = opendir(local.tags.c_str());
+	dirent* ent;
+
+	while(ent = readdir(tags))
+	{
+		if(ent->d_name == "." || ent->d_name == "..")
+			continue;
+
+		else // We must test each tag file to search a sign of the specified entry.
+		{
+			int count = search_in_file(ID, local.tags + '/' + ent->d_name);
+			
+			if(count > -1)
+				transfert_file(local.tags + '/' + ent->d_name, count);
+		}
+	}
 }
 
