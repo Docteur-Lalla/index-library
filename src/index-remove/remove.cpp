@@ -112,6 +112,14 @@ void index_remove(Option opt)
 	DIR* tags = opendir(local.tags.c_str());
 	dirent* ent;
 
+	// Verbose mode.
+	if(opt.isset("--verbose") || opt.isset("-v"))
+	{
+		print_color("removed entry ");
+		print_color(ID, GREEN);
+		print_color(" from tag files ");
+	}
+	
 	while(ent = readdir(tags))
 	{
 		if(ent->d_name == "." || ent->d_name == "..")
@@ -122,8 +130,16 @@ void index_remove(Option opt)
 			int count = search_in_file(ID, local.tags + '/' + ent->d_name);
 			
 			if(count > -1)
+			{
 				transfert_file(local.tags + '/' + ent->d_name, count);
+
+				if(opt.isset("--verbose") || opt.isset("-v"))
+					print_color(std::string(ent->d_name) + '/', CYAN);
+			}
 		}
 	}
+
+	if(opt.isset("--verbose") || opt.isset("-v"))
+		print_color(".\n");
 }
 
