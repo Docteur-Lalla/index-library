@@ -25,42 +25,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "remove.h"
+#ifndef INDEX_REMOVE_REMOVE
+#define INDEX_REMOVE_REMOVE
 
-Option init_option_system(int argc, char* argv[])
-{
-	// Create the classic option table.
-	std::vector<std::string> vec = vector_of_array(argc, argv);
-	std::map<std::string, bool> table = classic_option_table();
+#include "../index-core/option.h"
+#include "../index-core/color.h"
 
-	// Add the entry num option.
-	table.insert(table.end(), std::pair<std::string, bool>("--entry", true));
-	table.insert(table.end(), std::pair<std::string, bool>("-n", true));
+void remove(Option opt);
 
-	Option opt(vec);
-	opt.parse(table);
-
-	return opt;
-}
-
-int main(int argc, char* argv[])
-{
-	try
-	{
-		// Create option system.
-		Option opt(init_option_system(argc, argv));
-
-		if(opt.isset("--help") || opt.isset("-h"))
-			print_color("Type 'man index-remove' in your terminal to get help.\n");
-		else if(opt.isset("--version") || opt.isset("-V"))
-			print_color("index-remove 0.1 alpha, part of index-library 0.1 alpha.\n");
-		else
-			remove(opt);
-	}
-
-	catch(const std::string& str)
-	{
-		print_color(str, RED);
-	}
-}
+#endif
 
