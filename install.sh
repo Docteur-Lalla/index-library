@@ -11,6 +11,7 @@ chmod -R 777 /usr/share/index
 echo "Installing index' manuals..."
 cp doc/index*.1.gz /usr/share/man/man1/
 cp doc/index*.5.gz /usr/share/man/man5/
+cp doc/index*.7.gz /usr/share/man/man7/
 
 echo "Installing index' programs..."
 cp bin/index-* /usr/bin/
