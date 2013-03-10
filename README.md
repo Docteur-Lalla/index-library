@@ -27,4 +27,4 @@ Example :
 ### Installation
 
 If you want to choose the path of the entries and tags directories, edit the *index.conf* file. Else, don't do anything. Then, launch the *install.sh* script as superuser. The installation will operate.
-By default, the main, entries and tags directories have *777* rights. You can change it yourself, but remember that if someone want to add en entry, **he must have the write right**.
+By default, the main, entries and tags directories have *777* rights. You can change it yourself, but remember that if someone want to add en entry, **he must have the write right**. 
