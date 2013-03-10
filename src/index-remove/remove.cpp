@@ -40,6 +40,7 @@ int search_in_file(const std::string& id, const std::string& filename)
 
 	int count = 0;
 
+	// For each line (= entry), we test the ID to get the specified one.
 	while(getline(file, line))
 	{
 		std::string ID(line.substr(0, 8));
@@ -50,6 +51,7 @@ int search_in_file(const std::string& id, const std::string& filename)
 		count++;
 	}
 
+	// If the specified ID is not in this file, we return -1.
 	return -1;
 }
 
@@ -63,8 +65,10 @@ void transfert_file(const std::string& infile, int count)
 
 	int c = 0;
 
+	// We fill the content variable with input file's lines.
 	while(getline(file, line))
 	{
+		// If line's count is the specified one, we do not add the line to the content (removed).
 		if(count != c)
 			content += line + '\n';
 	
@@ -73,6 +77,7 @@ void transfert_file(const std::string& infile, int count)
 
 	file.close();
 
+	// We rewrite the tag file.
 	std::ofstream out(infile.c_str(), std::ios::trunc);
 
 	out << content;
