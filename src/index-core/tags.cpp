@@ -50,6 +50,7 @@ std::list<std::string> tags_of_string(const std::string& str)
 
 		for(auto it = str.begin(); it != str.end(); it++)
 		{
+			// We build the tag until we get a '/'.
 			if(*it != '/')
 				current += *it;
 			else
@@ -59,6 +60,7 @@ std::list<std::string> tags_of_string(const std::string& str)
 			}
 		}
 
+		// If the string is not '/' terminated, we missed the last tag.
 		if(str.back() != '/')
 			ret.push_back(current);
 	}

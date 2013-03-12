@@ -43,6 +43,7 @@ std::string entry_name_of_uint(unsigned int id)
 
 	std::string ret(ss.str());
 
+	// We must respect the length of the entry's ID.
 	while(ret.length() < 8)
 		ret.insert(0, "0");
 	
@@ -76,6 +77,7 @@ unsigned int entry_count(const index_local& local)
 	
 	unsigned int count = 0;
 
+	// While we have a file, we increment the count.
 	while(ent = readdir(dir))
 	{
 		count++;

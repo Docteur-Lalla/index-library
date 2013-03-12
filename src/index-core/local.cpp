@@ -32,6 +32,7 @@
 
 namespace
 {
+	// Each valid line is a command. It begins with a name.
 	std::string get_command_name(const std::string& str)
 	{
 		std::string cmd;
@@ -42,6 +43,7 @@ namespace
 		return cmd;
 	}
 
+	// Each command has a value.
 	std::string get_command_value(const std::string& str)
 	{
 		std::string::const_iterator it = str.begin();
@@ -57,12 +59,15 @@ namespace
 		return value;
 	}
 
+	// This procedure makes the difference between commentaries, empty lines and commands.
 	void analyze_line(index_local& local, std::string line)
 	{
-		if(line.front() == '#')
+		if(line.front() == '#') // commentary
 			return;
-		else if(line.empty())
+		else if(line.empty()) // empty line
 			return;
+
+		// Commands
 
 		std::string cmd = get_command_name(line);
 
@@ -78,6 +83,7 @@ namespace
 
 }
 
+// Gets informations from index.conf.
 index_local generate_local()
 {
 	std::string index_conf("/etc/index.conf");
