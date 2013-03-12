@@ -1,9 +1,21 @@
 #!/bin/bash
 
 echo "Making installation directories..."
-mkdir /usr/share/index
-mkdir /usr/share/index/tags
-mkdir /usr/share/index/entries
+
+if [ ! -e /usr/share/index ]
+then
+	mkdir /usr/share/index
+fi
+
+if [ ! -e /usr/share/index/entries ]
+then
+	mkdir /usr/share/index/entries
+fi
+
+if [ ! -e /usr/share/index/tags ]
+then
+	mkdir /usr/share/index/tags
+fi
 
 echo "Changing rights on the previous directories..."
 chmod -R 777 /usr/share/index
