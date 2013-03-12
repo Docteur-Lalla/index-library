@@ -106,6 +106,7 @@ namespace
 	}
 }
 
+// Each keyword is separated by a space, we create a list of each keyword.
 std::list<std::string> parse_input_list(const std::string& input)
 {
 	std::list<std::string> ret;
@@ -121,6 +122,7 @@ std::list<std::string> parse_input_list(const std::string& input)
 		else
 			current += *it;
 	
+	// If a keyword has begun and is not recorded yet, we do it.
 	if(!current.empty())
 		ret.push_back(current);
 	
@@ -130,6 +132,7 @@ std::list<std::string> parse_input_list(const std::string& input)
 // We take every entries from tag files.
 void create_list_from_tag_list(std::map<unsigned int, index_entry>& entries, const index_tags& tags)
 {
+	// Locals' generation to get tags directory's path.
 	index_local local = generate_local();
 
 	for(auto name : tags)
@@ -189,13 +192,14 @@ void purge_list_from_input(std::map<unsigned int, index_entry>& entries, const s
 	}
 }
 
+// Execute a command on a unique entry.
 void execute_command(unsigned int id, const std::string& exec)
 {
 	index_local local = generate_local();
 
 	std::string cmd(exec);
 
-	size_t pos = cmd.find("$$");
+	size_t pos = cmd.find("$$"); // We are looking for $$ flag to replace it by entry's ID.
 	if(pos != std::string::npos)
 	{
 		cmd.replace(pos, 2, local.entries + '/' + entry_name_of_uint(id));
@@ -203,6 +207,7 @@ void execute_command(unsigned int id, const std::string& exec)
 	}
 }
 
+// Execute a command on each entry.
 void execute_list_command(const std::map<unsigned int, index_entry>& entries, const std::string& exec)
 {
 	for(auto it : entries)

@@ -63,24 +63,30 @@ void transfert_file(const std::string& infile, int count)
 
 	std::ifstream file(infile.c_str());
 
-	int c = 0;
-
-	// We fill the content variable with input file's lines.
-	while(getline(file, line))
+	if(file)
 	{
-		// If line's count is the specified one, we do not add the line to the content (removed).
-		if(count != c)
-			content += line + '\n';
+		int c = 0;
+
+		// We fill the content variable with input file's lines.
+		while(getline(file, line))
+		{
+			// If line's count is the specified one, we do not add the line to the content (removed).
+			if(count != c)
+				content += line + '\n';
 	
-		c++;
+			c++;
+		}
+
+		file.close();
+
+		// We rewrite the tag file.
+		std::ofstream out(infile.c_str(), std::ios::trunc);
+
+		out << content;
 	}
 
-	file.close();
-
-	// We rewrite the tag file.
-	std::ofstream out(infile.c_str(), std::ios::trunc);
-
-	out << content;
+	else
+		throw std::string("unfound tag file : ") + infile + '.';
 }
 
 // Remove specified entry in the entries directory.
