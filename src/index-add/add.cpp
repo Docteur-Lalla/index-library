@@ -148,6 +148,14 @@ namespace
 
 		std::string outname = local.entries + '/' + entry_name_of_uint(id);
 
+		// We first test if the entry already exists.
+		std::ifstream test(outname.c_str());
+		if(test)
+		{
+			throw std::string("the entry already exists.");
+			test.close();
+		}
+
 		std::ofstream out(outname.c_str(), std::ios::trunc);
 		std::ifstream in(filename.c_str());
 
