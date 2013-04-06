@@ -25,28 +25,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "search.h"
 #include "../index-core/color.h"
+#include "../index-core/option.h"
 
 // Function to initialize the option system.
-Option init_option_system(int argc, char* argv[])
+Option init_option_system(int argc, char *argv[])
 {
-	// Creation of the classic option table.
+	// We create a classic option table.
 	std::vector<std::string> vec = vector_of_array(argc, argv);
 	std::map<std::string, bool> table(classic_option_table());
-
-	// Addition of the specific options of index-search.
-	// The input of the search.
-	table["--input"] = true;
-	table["-i"] = true;
-
-	// If we have only one entry, we execute a command on it.
-	table["--exec"] = true;
-	table["-e"] = true;
-
-	// Execute a command on each entry set in output.
-	table["--execlist"] = true;
-	table["-E"] = true;
 
 	Option opt(vec);
 	opt.parse(table);
@@ -54,19 +41,18 @@ Option init_option_system(int argc, char* argv[])
 	return opt;
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	try
 	{
 		Option opt(init_option_system(argc, argv));
-
-		// Check the version option and the help option.
+		
 		if(opt.isset("--version") || opt.isset("-V"))
-			print_color("index-search 0.1 alpha, part of index-library 0.1 alpha.\n");
+			print_color("index-shell 0.1 alpha, part of index-library 0.1 alpha.\n");
 		else if(opt.isset("--help") || opt.isset("-h"))
-			print_color("Type 'man index-search' in your terminal to get helped.\n");
+			print_color("Type 'man index-shell' in your terminal to get helped.\n");
 		else
-			search(opt);
+			print_color("let's a go\n", ORANGE);
 	}
 
 	catch(const std::string& str)
@@ -76,3 +62,4 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+
