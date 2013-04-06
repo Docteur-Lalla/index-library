@@ -25,43 +25,19 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "../index-core/color.h"
-#include "../index-core/option.h"
+#ifndef INDEX_SHELL_ENVIRONMENT
+#define INDEX_SHELL_ENVIRONMENT
 
-#include "environment.h"
+#include "../index-core/tags.h"
+#include <map>
 
-// Function to initialize the option system.
-Option init_option_system(int argc, char *argv[])
+struct index_shell_environment
 {
-	// We create a classic option table.
-	std::vector<std::string> vec = vector_of_array(argc, argv);
-	std::map<std::string, bool> table(classic_option_table());
+	index_tags tags; // Current tags environment.
+	std::map<std::string, std::string> variables; // Variables defined in the shell by "let" command.
 
-	Option opt(vec);
-	opt.parse(table);
+	std::string user; // User's name, defined by "login" command.
+};
 
-	return opt;
-}
-
-int main(int argc, char *argv[])
-{
-	try
-	{
-		Option opt(init_option_system(argc, argv));
-		
-		if(opt.isset("--version") || opt.isset("-V"))
-			print_color("index-shell 0.1 alpha, part of index-library 0.1 alpha.\n");
-		else if(opt.isset("--help") || opt.isset("-h"))
-			print_color("Type 'man index-shell' in your terminal to get helped.\n");
-		else
-			print_color("let's a go\n", ORANGE);
-	}
-
-	catch(const std::string& str)
-	{
-		print_color(str + '\n', RED, DEFAULT, true);
-	}
-
-	return 0;
-}
+#endif
 
