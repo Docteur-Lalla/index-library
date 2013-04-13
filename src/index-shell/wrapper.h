@@ -25,63 +25,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "color.h"
-#include <sstream>
+#ifndef INDEX_SHELL_WRAPPER
+#define INDEX_SHELL_WRAPPER
 
-void print_color(const std::string& msg, IndexColor fore, IndexColor back, bool enlighted)
-{
-	if(!msg.empty())
-	{
-		std::stringstream ss;
-		ss << "\033[";
-	
-		if(enlighted)
-			ss << "1;";
-	
-		ss << fore << ";" << back + 10 << "m";
-		ss << msg << "\033[0;0m";
+#include <lua.hpp>
+#include "../index-core/color.h"
 
-		std::cout << ss.str();
-	}
-}
+int lua_print_color(lua_State* lua);
 
-IndexColor color_of_int(int i)
-{
-	if(i > 37)
-		i -= 10;
-
-	switch(i)
-	{
-		case 0:
-			return DEFAULT;
-			break;
-		case 30:
-			return BLACK;
-			break;
-		case 31:
-			return RED;
-			break;
-		case 32:
-			return GREEN;
-			break;
-		case 33:
-			return ORANGE;
-			break;
-		case 34:
-			return BLUE;
-			break;
-		case 35:
-			return PURPLE;
-			break;
-		case 36:
-			return CYAN;
-			break;
-		case 37:
-			return GREY;
-			break;
-		default:
-			return DEFAULT;
-			break;
-	}
-}
+#endif
 

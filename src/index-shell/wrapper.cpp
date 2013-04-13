@@ -25,63 +25,37 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "color.h"
-#include <sstream>
+#include "wrapper.h"
 
-void print_color(const std::string& msg, IndexColor fore, IndexColor back, bool enlighted)
+int lua_print_color(lua_State* lua)
 {
-	if(!msg.empty())
+	int argc = lua_gettop(lua);
+	int fore;
+	int back;
+
+	switch(argc)
 	{
-		std::stringstream ss;
-		ss << "\033[";
-	
-		if(enlighted)
-			ss << "1;";
-	
-		ss << fore << ";" << back + 10 << "m";
-		ss << msg << "\033[0;0m";
-
-		std::cout << ss.str();
-	}
-}
-
-IndexColor color_of_int(int i)
-{
-	if(i > 37)
-		i -= 10;
-
-	switch(i)
-	{
-		case 0:
-			return DEFAULT;
+		case 1:
+			print_color(lua_tostring(lua, 1));
 			break;
-		case 30:
-			return BLACK;
+		case 2:
+			fore = lua_tointeger(lua, 2);
+			print_color(lua_tostring(lua, 1), color_of_int(fore));
 			break;
-		case 31:
-			return RED;
+		case 3:
+			fore = lua_tointeger(lua, 2);
+			back = lua_tointeger(lua, 3);
+			print_color(lua_tostring(lua, 1), color_of_int(fore), color_of_int(back));
 			break;
-		case 32:
-			return GREEN;
-			break;
-		case 33:
-			return ORANGE;
-			break;
-		case 34:
-			return BLUE;
-			break;
-		case 35:
-			return PURPLE;
-			break;
-		case 36:
-			return CYAN;
-			break;
-		case 37:
-			return GREY;
+		case 4:
+			fore = lua_tointeger(lua, 2);
+			back = lua_tointeger(lua, 3);
+			print_color(lua_tostring(lua, 1), color_of_int(fore), color_of_int(back), lua_toboolean(lua, 4));
 			break;
 		default:
-			return DEFAULT;
 			break;
 	}
+
+	return 0;
 }
 

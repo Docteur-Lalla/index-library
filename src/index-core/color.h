@@ -45,6 +45,7 @@ enum IndexColor
 };
 
 void print_color(const std::string& msg, IndexColor fore = DEFAULT, IndexColor back = DEFAULT, bool enlighted = false);
+IndexColor color_of_int(int i);
 
 #endif
 

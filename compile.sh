@@ -13,10 +13,10 @@ then
   g++ -std=c++0x -o bin/index-remove src/index-core/* src/index-remove/*
 
   echo "Compilation of index-shell."
-  g++ -std=c++0x -o bin/index-shell src/index-core/* src/index-shell/*
+  g++ -std=c++0x -o bin/index-shell src/index-core/* -llua -ldl src/index-shell/*
 
 else
   echo "Compilation of ${1}."
-  g++ -std=c++0x -o bin/$1 src/index-core/* src/$1/*
+  g++ -std=c++0x -o bin/$1 -llua -ldl src/index-core/* src/$1/*
 fi
 

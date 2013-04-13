@@ -29,6 +29,7 @@
 #include "../index-core/option.h"
 
 #include "environment.h"
+#include "wrapper.h"
 
 // Function to initialize the option system.
 Option init_option_system(int argc, char *argv[])
@@ -45,6 +46,11 @@ Option init_option_system(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
+	lua_State *lua = luaL_newstate();
+	luaL_openlibs(lua);
+
+	lua_register(lua, "print_color", lua_print_color);
+
 	try
 	{
 		Option opt(init_option_system(argc, argv));
@@ -62,6 +68,8 @@ int main(int argc, char *argv[])
 		print_color(str + '\n', RED, DEFAULT, true);
 	}
 
+	luaL_dofile(lua, "atom.lua");
+	lua_close(lua);
 	return 0;
 }
 
