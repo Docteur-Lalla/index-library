@@ -50,6 +50,10 @@ int main(int argc, char *argv[])
 	luaL_openlibs(lua);
 
 	lua_register(lua, "print_color", lua_print_color);
+	luaL_dofile(lua, "atom.lua");
+
+	lua_getglobal(lua, "main");
+	lua_pcall(lua, 0, 0, 0);
 
 	try
 	{
@@ -68,7 +72,6 @@ int main(int argc, char *argv[])
 		print_color(str + '\n', RED, DEFAULT, true);
 	}
 
-	luaL_dofile(lua, "atom.lua");
 	lua_close(lua);
 	return 0;
 }
